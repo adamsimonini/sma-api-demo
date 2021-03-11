@@ -19,7 +19,7 @@ app.get("/api/refresh", apiRoutes.refreshTokens);
 app.use(express.static("public")); //make available to browser these files without additional request
 app.get("/*", (req, res) => {
   //all other routes - default route
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(port, () => {

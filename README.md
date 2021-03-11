@@ -3,7 +3,7 @@
 ## **Technical Requirements**
 
 This is a Node.js app running Express.js as its server.
-You must have Node.js installed, along with npm (which should come with your node installation).
+You must have Node.js installed, along with npm.
 
 ## **Running the app**
 
@@ -15,7 +15,7 @@ Ensure that you have a .env file with appropriate values for
 
 Those values can be found by logging into SMA as an admin, then settings > integrations > apply connect. Please note that the latest refresh token is needed to refresh the access token. Hence, if you refresh the tokens (locally or remotely), it will break all other instances of the app, because their refresh token will no longer be valid.
 
-Run "npm i" at the root directory to install all dependancies
+Run "npm i" at the root directory to install all dependancies.
 Start the server using "node app" (or nodemon if you have it globally installed).
 Visit localhost:8080 in your browser.
 

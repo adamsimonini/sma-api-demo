@@ -1,7 +1,7 @@
 {
-  "name": "sma-connect",
+  "name": "sma-api-demo",
   "version": "1.0.0",
-  "description": "",
+  "description": "demo of the surveymonkey apply api",
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.19.0",

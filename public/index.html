@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HCCF API Demo</title>
+    <link rel="stylesheet" type="text/css" href="index.css" />
+</head>
+
+<header>
+    <img id="logo" src="images/leaf.jpg" alt="Canada's Federal Government Logo" />
+    <h1>HCCF API Demo</h1>
+    <div>
+
+        <!-- <a href="http://localhost:3000/api_refresh"> -->
+        <button onclick="getAllApps()">All HCCF Apps</button>
+        <!-- <button onclick="singleAppTasks(18025312)">Single App Tasks</button> -->
+        <button onclick="getAllTasks()">Eligibility Stage Answers</button>
+        <button onclick="getAllIds()">All App IDs</button>
+        <button onclick="refreshTokens()">Refresh tokens</button>
+        <button onclick="toggleInfo()">Info</button>
+    </div>
+</header>
+
+<body>
+    <!-- </a> -->
+    <div id="errorBox" class="hidden"></div>
+    <div id="info" class="hidden">
+        <p>Do not run this app in Internet Explorer. Please use a modern browser.</p>
+        <p>If data isn't coming back, pressing the "refresh tokens" button might fix that.</p>
+        <p>This app consumes SMA's API. It has access via access tokens, which must be refreshed when they expire.
+            If refreshing doesn't work, it is because the tokens were manually updated within SMA itself.</p>
+        <p>The API can get all applications across all the programs within our system, hence the disparity between the
+            number items returned from clicking "All HCCF Apps" and "All App IDs".</p>
+        <p>The API requests can be filtered by a number of criteria, as described <a
+                href="https://connect.smapply.io/pages/resources.html#applications">here</a>.</p>
+        <p>One major shortcoming of the API is that answers to limited choice questions (e.g., radio buttons,
+            checkboxes, dropdowns, etc) are stored as integers, and the integer is what the API sends back.
+            For example, think of the three risk factors: unhealthy eating, physical inactivity, and tobacco use. For
+            each application SMA stores those selections as 0, 1, and 2. It knows that 0 = unhealthy eating, 1 =
+            physical inactivity, and 2 = tobacco use. The API doesn't send that mapping, however. It only sends the
+            integer. It's therefore up to the consumer of the API to map out the meanings of these integers. What is
+            worse, if the mapping changes within our system, for example we add a new risk factor, then that change must
+            be manually tracked and changed by the API consumer
+            (e.g., some future app leveraging this API).
+        </p>
+        <p>The "Eligibility Stage Answers" button is slow. This is because one API call is used to get all the app IDs,
+            and then, for each application, an API call is made to retrieve that particular application's tasks (i.e.,
+            questions ans answers). This means many calls are made sequentially, one after the other. This will get slower as more
+            applications are added. A developer must introduce cashing to avoid slowdowns. This means storing tasks as they come back,
+            along with their IDs and "last updated" time. Then, when a new requst comes in, check if the stored tasks were updated since last time, and
+            only make a call for tasks when there was an update, or when the application is entirely new. Further, we can limit the API to only making calls for
+            active applications.
+        </p>
+    </div>
+    <div id="loader" class="hidden"></div>
+    <div id="root">
+        <ol id="ordered-list"></ol>
+        <div id="container"></div>
+    </div>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+
+<script>
+
+</script>
+
+</html>

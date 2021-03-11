@@ -1,0 +1,72 @@
+#ordered-list .app-preview {
+  padding: 10px;
+  border-left: 3px solid transparent;
+}
+
+#ordered-list .app-preview:hover {
+  cursor: pointer;
+  border-left: 3px solid black;
+}
+
+#ordered-list .app-preview:nth-child(odd) {
+  background-color: antiquewhite;
+}
+
+#container .single-app {
+  background-color: antiquewhite;
+}
+
+#loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.id {
+  padding: 10px;
+  border-left: 3px solid transparent;
+}
+.id:nth-child(odd) {
+  background-color: antiquewhite;
+}
+
+#errorBox {
+  color: red;
+}
+
+#logo {
+  max-width: 50px;
+  display: inline-block;
+}
+
+h1 {
+  display: inline-block;
+}
+
+header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}

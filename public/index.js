@@ -41,7 +41,7 @@ const getAllApps = () => {
 					let appCard = document.createElement("LI");
 					appCard.setAttribute("data-id", app.id);
 					appCard.classList.add("app-preview");
-					appCard.innerHTML += `<b>id:</b> ${app.id} | `;
+					appCard.innerHTML += `<i class="fas fa-user"></i> <b>id:</b> ${app.id} | `;
 					appCard.innerHTML += `<b>applicant's first name:</b> ${app.applicant.first_name} | `;
 					appCard.innerHTML += `<b>created at:</b> ${app.created_at}`;
 					appCard.addEventListener("click", function () {
@@ -168,10 +168,12 @@ const getAllTasks = () => {
 	toggleLoader();
 	let totalRequestedFunding = 0;
 	let totalMonths = 0;
+	let orgNum = null;
 	const questionMap = {
 		riskFactors: "7ZXEJeHBpw",
 		projectDuration: "hIftbNILRJ",
-		requestedFunding: "hJE5DH67E7"
+		requestedFunding: "hJE5DH67E7",
+		orgType: "P8k5AmOdI8"
 	};
 	const riskFactorMap = {
 		0: "physicalInactivity",
@@ -183,26 +185,22 @@ const getAllTasks = () => {
 		unhealthyEating: 0,
 		tobaccoUse: 0
 	};
-	//   const locationMap = {
-	//     0: "2",
-	//     1: "2",
-	//     2: ""
-	//   };
-	//   let locationTotals = {
-	//     AB: 0,
-	//     BC: 0,
-	//     MB: 0,
-	//     NB: 0,
-	//     NL: 0,
-	//     NS: 0,
-	//     NT: 0,
-	//     NU: 0,
-	//     ON: 0,
-	//     PE: 0,
-	//     QC: 0,
-	//     SK: 0,
-	//     YT: 0
-	//   };
+	const orgMap = {
+		0: "notForProfit",
+		1: "unincorporated",
+		2: "govAgency",
+		3: "provGovInst",
+		4: "indigenous",
+		5: "privateSector"
+	};
+	let orgTotals = {
+		notForProfit: 0,
+		unincorporated: 0,
+		govAgency: 0,
+		provGovInst: 0,
+		indigenous: 0,
+		privateSector: 0
+	}
 	fetch(`/api/all-apps-tasks`)
 		.then(function (response) {
 			toggleLoader();
@@ -213,11 +211,11 @@ const getAllTasks = () => {
 			// Examine the text in the response
 			response.json().then(function (apps) {
 				apps.forEach(app => {
+					// console.log(app);
 					// check that the application isn't empty, and that completed_at for the eligibility quiz is set to any truthy value (it defaults to null)
 					if (app[0] && app[0].completed_at) {
 						totalMonths += parseInt(app[0].data[questionMap.projectDuration].response);
 						totalRequestedFunding += parseInt(app[0].data[questionMap.requestedFunding].response);
-						console.log(app[0].data[questionMap.riskFactors].response);
 						app[0].data[questionMap.riskFactors].response.forEach(riskFactor => {
 							switch (riskFactor) {
 								case 0:
@@ -231,13 +229,23 @@ const getAllTasks = () => {
 									break;
 							}
 						});
+						orgNum = app[0].data[questionMap.orgType].response;
+						console.log(orgMap[orgNum]);
+						orgTotals[orgMap[orgNum]] += 1;
 					}
 				});
+				// 0: "Not-For-Profit Organization",
+				// 1: "Unincorporated Group",
+				// 2: "Government Agency",
+				// 3: "Province/Territory Government Supported Institution",
+				// 4: "Indigenous Organization",
+				// 5: "Private-Sector Organization"
 				let appCard = document.createElement("DIV");
 				appCard.classList.add("id");
-				appCard.innerHTML += `<h2>Total funding requested:</h2> $${totalRequestedFunding}`;
-				appCard.innerHTML += `<h2>Average project duration:</h2> ${Math.floor(totalMonths / apps.length)} months`;
-				appCard.innerHTML += `<h2>Risk factor tally:</h2> <ul><li>Physical inactivity: ${riskFactorTotals.physicalInactivity}</li> <li>Unhealthy eating: ${riskFactorTotals.unhealthyEating}</li> <li>Tobacco Use: ${riskFactorTotals.tobaccoUse} </li></ul>`;
+				appCard.innerHTML += `<span class="title">Total funding requested:</span> <span class="stats">$${totalRequestedFunding}</span> <br/><br/>`;
+				appCard.innerHTML += `<span class="title">Average project duration:</span> <span class="stats">${Math.floor(totalMonths / apps.length)} months</span>`;
+				appCard.innerHTML += `<h2>Risk factor tally:</h2> <div id="risk-container"><div class="risk"><i class="fas fa-couch"></i> Physical inactivity: ${riskFactorTotals.physicalInactivity}</div> <div class="risk"><i class="fas fa-hamburger"></i> Unhealthy eating: ${riskFactorTotals.unhealthyEating}</div> <div class="risk"><i class="fas fa-smoking"></i> Tobacco Use: ${riskFactorTotals.tobaccoUse} </div></div>`;
+				appCard.innerHTML += `<h2>Organizations:</h2> <div id="org-container"><div class="org"><i class="fas fa-hands-helping"></i> Not-For-Profit Organization: ${orgTotals.notForProfit}</div> <div class="org"><i class="fas fa-users"></i> Unincorporated Group: ${orgTotals.unincorporated}</div> <div class="org"><i class="fab fa-canadian-maple-leaf"></i> Government Agency: ${orgTotals.govAgency} </div> <div class="org"><i class="fas fa-school"></i> Provincial Insitution: ${orgTotals.provGovInst} </div> <div class="org"><i class="fab fa-pagelines"></i> Indigenous Organization: ${orgTotals.indigenous} </div> <div class="org"><i class="fas fa-building"></i> Private Sector: ${orgTotals.privateSector} </div></div>`;
 				container.appendChild(appCard);
 				console.log(apps);
 			});
